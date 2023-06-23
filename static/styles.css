@@ -64,7 +64,7 @@ a:focus {
 #sidebar {
     min-width: 250px;
     max-width: 250px;
-    background: #3c88a3;
+    background: #002c3b;
     color: #fff;
     transition: all 0.3s;
 }
@@ -75,7 +75,7 @@ a:focus {
 
 #sidebar .sidebar-header {
     padding: 20px;
-    background: #3c88a3;
+    background: #002c3b;
 }
 
 #sidebar ul.components {
@@ -120,7 +120,7 @@ a[data-toggle="collapse"] {
 ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
-    background: #6d7fcc;
+    background: #002c3b;
 }
 
 ul.CTAs {
