@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div id="form-content" class="container">
+    <!-- Your form HTML goes here -->
+    <h2 class="mb-4 mt-4">Collect Data Form</h2>
+    <div class="row">
+        <div class="col-md-6 ">
+            <form method="POST" action="/collect_data">
+                <div class="form-group">
+                    <label for="food_name">Food Name:</label>
+                    <input type="text" class="form-control" id="food_name" name="food_name">
+                </div>
+                <div class="form-group">
+                    <label for="portion_size">Portion Size (g):</label>
+                    <input type="text" class="form-control" id="portion_size" name="portion_size">
+                </div>
+                <div class="form-group">
+                    <label for="portion_size">Insulin (optional):</label>
+                    <input type="text" class="form-control" id="portion_size" name="portion_size">
+                </div>
+                <div class="form-group">
+                    <label for="timestamp">Timestamp:</label>
+                    <input type="datetime-local" class="form-control" id="timestamp" name="timestamp" value="{{ current_timestamp }}">
+                </div>
+                <button type="submit" class="mt-4 btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div id="flash-message" class="mt-2 alert alert-success">
+            {{ messages[0] }}
+        </div>
+    {% endif %}
+    
+{% endwith %}
+</div>
+
+<script>
+    setTimeout(function() {
+        var flashMessage = document.getElementById('flash-message');
+        if (flashMessage) {
+            flashMessage.remove();
+        }
+    }, 5000);
+</script>
+{% endblock %}

@@ -1,31 +1,14 @@
-import json
 import os
-import sys
 from datetime import datetime
 
-import numpy as np
-import pandas as pd
-import requests
-from secure import SecureHeaders
-from flask import Flask, render_template, session
-from flask import send_file
-from flask_bootstrap import Bootstrap
-from werkzeug.utils import secure_filename
-from flask import request
-
-
-
-# SETTINGS = get_config('config/deployment.cfg')
-
+from flask import Flask, render_template, request, flash, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
-import os
 from secure import SecureHeaders
 
 app = Flask(__name__)
-SESSION_TYPE = 'redis'
 app.secret_key = 'super secret key'
-app.config.from_object(__name__)
+SESSION_TYPE = 'redis'
 Bootstrap(app)
 os.makedirs(os.path.join(os.getcwd(), 'logs'), exist_ok=True)
 datetimetag = 'unknown'
@@ -47,20 +30,41 @@ class FoodEntry(db.Model):
         self.portion_size = portion_size
         self.timestamp = timestamp
 
-@app.route('/', methods=['GET', 'POST'])
-def form():
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+@app.route('/model')
+def model():
+    return render_template('model.html')
+
+@app.route('/collect_data', methods=['GET', 'POST'])
+def collect_data():
     if request.method == 'POST':
         food_name = request.form['food_name']
         portion_size = request.form['portion_size']
-        timestamp = request.form['timestamp']
-
+        timestamp = datetime.strptime(request.form['timestamp'], '%Y-%m-%dT%H:%M')
+        
         entry = FoodEntry(food_name=food_name, portion_size=portion_size, timestamp=timestamp)
         db.session.add(entry)
         db.session.commit()
 
-        return 'Data recorded successfully'
+        flash('Data recorded successfully', 'success')
 
-    return render_template('index.html')
+    current_timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M')
+    return render_template('collect_data.html', current_timestamp=current_timestamp)
+
+@app.route('/show_data')
+def show_data():
+    entries = FoodEntry.query.all()
+    return render_template('show_data.html', entries=entries)
+
+@app.route('/delete/<int:entry_id>', methods=['POST'])
+def delete_entry(entry_id):
+    entry = FoodEntry.query.get_or_404(entry_id)
+    db.session.delete(entry)
+    db.session.commit()
+    return redirect('/show_data')
 
 @app.after_request
 def set_secure_headers(response):
@@ -68,6 +72,10 @@ def set_secure_headers(response):
     return response
 
 if __name__ == '__main__':
+    with app.app_context():
+        # Create the database tables
+        db.create_all()
+    
     app.secret_key = 'super secret key'
     app.debug = True
     app.run("0.0.0.0", port=8080, debug=True)

@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="col-md-9 mt-4">
+  <!-- Database Entries -->
+  <h2>Database Entries</h2>
+  {% if entries %}
+
+  <table class="table table-striped">
+      <thead>
+          <tr>
+              <th>ID</th>
+              <th>Food Name</th>
+              <th>Portion Size</th>
+              <th>Timestamp</th>
+              <th>Actions</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for entry in entries %}
+          <tr>
+              <td>{{ entry.id }}</td>
+              <td>{{ entry.food_name }}</td>
+              <td>{{ entry.portion_size }}</td>
+              <td>{{ entry.timestamp }}</td>
+              <td>
+                  <form action="/delete/{{ entry.id }}" method="POST">
+                      <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                  </form>
+              </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+  {% else %}
+  <p>No entries found.</p>
+{% endif %}
+</div>
+</div>
+</div>
+{% endblock %}

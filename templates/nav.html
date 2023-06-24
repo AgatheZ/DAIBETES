@@ -7,23 +7,28 @@
         </div>
         <ul class="list-unstyled components">
             <p>Automating diabetes surveillance</p>
-            <li class="active">
-                <a href="#homeSubmenu" id="home" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+			<li>
+				<a href="/" class="side_class">Home</a>
+			</li>
+            <li>
+	
+                <a href="#homeSubmenu" id="home" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle side_class">Tools</a>
                 <ul class="collapse list-unstyled" id="homeSubmenu">
-                    <li>
-                        <a href="#" id="collectDataBtn">Collect Data</a>
+
+					<li>
+                        <a  href="/collect_data" class="side_class">Collect Data</a>
                     </li>
                     <li>
-                        <a href="#">Home 2</a>
+                        <a href=" /show_data" class="side_class">Show Data</a>
                     </li>
                     <li>
-                        <a href="#">Home 3</a>
+                        <a href="/model" class="side_class">Model</a>
                     </li>
                 </ul>
             </li>
             
             <li>
-                <a href="#">Contact</a>
+                <a href="#" class="side_class">Contact</a>
             </li>
         </ul>
         <ul class="list-unstyled CTAs"></ul>
@@ -31,91 +36,11 @@
 
     <!-- Page Content  -->
     <div id="content">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <button type="button" id="sidebarCollapse" class="btn btn-info">
-                    <i class="fas fa-align-left"></i>
-                    <span>Toggle Sidebar</span>
-                </button>
-                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
-                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fas fa-align-justify"></i>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="nav navbar-nav ml-auto"></ul>
-                </div>
+		{% block content %}{% endblock %}
             </div>
         </nav>
-        <div id="page-content">
-            <h2>What is DAIBETES about?</h2>
-            <p>My AI application is designed to assist people with type 1 diabetes in managing their condition and
-                maintaining healthy blood sugar levels. Using the Openfood Fact API, users can input information about
-                their meals, how they feel, and any other factors that may impact their sugar levels. They can also
-                input data from their Freestyle Libre device. Based on this information and the user's historical data,
-                our AI system is able to predict how much insulin the user should inject. We hope that this tool will
-                make it easier for people with type 1 diabetes to take control of their health and feel confident in
-                their insulin dosage decisions.</p>
+        
 
-            <div class="line"></div>
 
-            <h2>Why am I developing this application?</h2>
-            <p>As someone who lives with type 1 diabetes, I know firsthand how challenging it can be to manage my
-                condition and keep my blood sugar levels in check. That's why I'm so excited about the AI application I
-                am developing. I hope it can help others with type 1 diabetes as well.</p>
-
-            <div class="line"></div>
-
-            <h2>About me <a href="https://www.linkedin.com/in/agathe-zecevic-7034b91b0/" target="_blank"><img
-                        src="static\linkedin.png" alt="LinkedIn" width="30" height="30" /></a> <a
-                    href="https://github.com/AgatheZ" target="_blank"><img src="static\github.png" alt="GitHub"
-                        width="30" height="30" /></a></h2>
-            <p>As a Data Scientist at Guys and St Thomas NHS trust, I am proud to be part of a team that is dedicated to
-                improving healthcare outcomes. My background in Computer Science, with a specialization in AI and
-                machine learning, has prepared me to tackle complex data challenges and find innovative solutions to
-                problems. On this project, I am always excited to use my skills and expertise to make a positive impact
-                on the lives of others. </p>
-        </div>
-
-        <div id="form-content" style="display: none;">
-            <!-- Your form HTML goes here -->
-            <h2>Collect Data Form</h2>
-			<form method="POST" action="/">
-				<div class="form-group">
-					<label for="food_name">Food Name:</label>
-					<input type="text" class="form-control" id="food_name" name="food_name">
-				</div>
-				<div class="form-group">
-					<label for="portion_size">Portion Size:</label>
-					<input type="text" class="form-control" id="portion_size" name="portion_size">
-				</div>
-				<div class="form-group">
-					<label for="timestamp">Timestamp:</label>
-					<input type="datetime-local" class="form-control" id="timestamp" name="timestamp">
-				</div>
-				<button type="submit" class="btn btn-primary">Submit</button>
-			</form>
-        </div>
-    </div>
-</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // Handle "Collect Data" button click event
-        $('#collectDataBtn').click(function (e) {
-            e.preventDefault();
-            // Hide the page content and show the form content
-            $('#page-content').hide();
-            $('#form-content').show();
-        });
-
-        // Handle "Home" button click event
-        $('#home').click(function (e) {
-            e.preventDefault();
-            // Show the page content and hide the form content
-            $('#page-content').show();
-            $('#form-content').hide();
-        });
-    });
-</script>
