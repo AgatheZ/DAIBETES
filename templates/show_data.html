@@ -11,6 +11,7 @@
               <th>ID</th>
               <th>Food Name</th>
               <th>Portion Size</th>
+              <th>Carbs (100g)</th>
               <th>Timestamp</th>
               <th>Actions</th>
           </tr>
@@ -21,6 +22,7 @@
               <td>{{ entry.id }}</td>
               <td>{{ entry.food_name }}</td>
               <td>{{ entry.portion_size }}</td>
+              <td>{{ entry.carb }}</td>
               <td>{{ entry.timestamp }}</td>
               <td>
                   <form action="/delete/{{ entry.id }}" method="POST">

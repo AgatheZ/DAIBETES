@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from databases.off import OpenFoodFacts
 
 from flask import Flask, render_template, request, flash, redirect
 from flask_sqlalchemy import SQLAlchemy
@@ -13,20 +14,22 @@ Bootstrap(app)
 os.makedirs(os.path.join(os.getcwd(), 'logs'), exist_ok=True)
 datetimetag = 'unknown'
 secure_headers = SecureHeaders()
-
 # Configure SQLite database connection
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 db = SQLAlchemy(app)
+db_off = OpenFoodFacts()
 
 # Define the database model for collected data
 class FoodEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     food_name = db.Column(db.String(100))
     portion_size = db.Column(db.String(20))
+    carb = db.Column(db.String(20))
     timestamp = db.Column(db.DateTime)
 
-    def __init__(self, food_name, portion_size, timestamp):
+    def __init__(self, food_name, portion_size, carb, timestamp):
         self.food_name = food_name
+        self.carb = carb
         self.portion_size = portion_size
         self.timestamp = timestamp
 
@@ -44,8 +47,8 @@ def collect_data():
         food_name = request.form['food_name']
         portion_size = request.form['portion_size']
         timestamp = datetime.strptime(request.form['timestamp'], '%Y-%m-%dT%H:%M')
-        
-        entry = FoodEntry(food_name=food_name, portion_size=portion_size, timestamp=timestamp)
+        res = db_off.get_product(food_name)
+        entry = FoodEntry(food_name=res.name, portion_size=portion_size, carb = res.carb, timestamp=timestamp)
         db.session.add(entry)
         db.session.commit()
 
