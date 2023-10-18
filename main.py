@@ -2,10 +2,13 @@ import os
 from datetime import datetime
 from databases.off import OpenFoodFacts
 
-from flask import Flask, render_template, request, flash, redirect
+from flask import Flask, render_template, request, flash, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from secure import SecureHeaders
+from utils.typesenseutils import createMongoClient, queryTypeSense, importToTypeSense
+from typesense import Client
+import pymongo
 
 app = Flask(__name__)
 app.secret_key = 'super secret key'
@@ -33,6 +36,15 @@ class FoodEntry(db.Model):
         self.portion_size = portion_size
         self.timestamp = timestamp
 
+#Initiate the clients 
+mongo_client = pymongo.MongoClient("mongodb://root:toor@192.168.1.40:27017/")
+client = Client({
+    'nodes': [{'host': 'localhost', 'port': '8108', 'protocol': 'http'}],
+    'api_key': 'test',
+    'connection_timeout_seconds': 2
+})
+
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -56,6 +68,19 @@ def collect_data():
 
     current_timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M')
     return render_template('collect_data.html', current_timestamp=current_timestamp)
+
+@app.route('/import_to_typesense', methods=['POST'])
+def import_to_typesense():
+    # Utilisez votre fonction importToTypeSense() ici
+    importToTypeSense()  
+    return "Importation terminée"
+
+@app.route('/search', methods=['GET'])
+def search_products():
+    query = request.args.get('query')
+    # Utilisez votre fonction queryTypeSense() ici
+    results = queryTypeSense(query)
+    return jsonify(results)
 
 @app.route('/show_data')
 def show_data():

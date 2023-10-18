@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  typesense:
+    image: typesense/typesense:0.24.1
+    restart: on-failure
+    ports:
+      - "8108:8108"
+    volumes:
+      - ./typesense-data:/data
+    command: '--data-dir /data --api-key=test --enable-cors'
+    healthcheck:
+      test: curl --fail http://localhost:8108/health" || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - "${MONGO_DATA_PATH}:/data/db"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: toor
+  daibetes_app:
+    build: .
+    ports:
+      - "8090:8080"
