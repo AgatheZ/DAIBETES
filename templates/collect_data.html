@@ -2,48 +2,89 @@
 
 {% block content %}
 <div id="form-content" class="container">
-    <!-- Your form HTML goes here -->
     <h2 class="mb-4 mt-4">Collect Data Form</h2>
     <div class="row">
-        <div class="col-md-6 ">
+        <div class="col-md-6">
             <form method="POST" action="/collect_data">
                 <div class="form-group">
                     <label for="food_name">Food Name:</label>
-                    <input type="text" class="form-control" id="food_name" name="food_name">
-                </div>
-                <div class="form-group">
-                    <label for="portion_size">Portion Size (g):</label>
-                    <input type="text" class="form-control" id="portion_size" name="portion_size">
-                </div>
-                <div class="form-group">
-                    <label for="portion_size">Insulin (optional):</label>
-                    <input type="text" class="form-control" id="portion_size" name="portion_size">
-                </div>
-                <div class="form-group">
-                    <label for="timestamp">Timestamp:</label>
-                    <input type="datetime-local" class="form-control" id="timestamp" name="timestamp" value="{{ current_timestamp }}">
-                </div>
-                <button type="submit" class="mt-4 btn btn-primary">Submit</button>
+                    <input type="text" id="food_name" name="food_name" required>
+                    <script type="text/html" id="hit-template">
+                        <div>
+                            <strong>{{name}}</strong>
+                        </div>
+                    </script>
+                    <div id="hits"></div>
+                    <!-- Dropdown for selecting a product -->
+                    <div class="form-group">
+                        <div class="form-group">
+                            <select name="selected_product" id="selected_product" class="form-control"
+                                onchange="updateFoodName()">
+                                {% for product in products %}
+                                <option value="{{ product.name }}">{{ product.name }} ({{
+                                    product.carbohydrates }}/100g)</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="portion_size">Portion Size (g):</label>
+                        <input type="text" class="form-control" id="portion_size" name="portion_size" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="insulin">Insulin (optional):</label>
+                        <input type="text" class="form-control" id="insulin" name="insulin">
+                    </div>
+                    <div class="form-group">
+                        <label for="timestamp">Timestamp:</label>
+                        <input type="datetime-local" class="form-control" id="timestamp" name="timestamp"
+                            value="{{ current_timestamp }}" required>
+                    </div>
+
+
+                    <button type="submit" class="mt-4 btn btn-primary">Submit</button>
             </form>
         </div>
-    </div>
-
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <div id="flash-message" class="mt-2 alert alert-success">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div id="flash-message" class="mt-2 alert alert-success">
             {{ messages[0] }}
         </div>
-    {% endif %}
-    
-{% endwith %}
-</div>
+        {% endif %}
+        {% endwith %}
+    </div>
 
+
+
+</div>
 <script>
-    setTimeout(function() {
-        var flashMessage = document.getElementById('flash-message');
-        if (flashMessage) {
-            flashMessage.remove();
-        }
-    }, 5000);
+    document.addEventListener('DOMContentLoaded', function () {
+        const inputField = document.getElementById('food_name');
+        const dropdown = document.getElementById('selected_product');
+
+        inputField.addEventListener('input', function () {
+            fetch(`/query_typesense?query=${inputField.value}`)
+                .then(response => response.json())
+                .then(data => {
+                    dropdown.innerHTML = '';
+                    data.forEach(product => {
+                        const option = document.createElement('option');
+                        option.value = product.id;
+                        option.text = `${product.name} (${product.carbohydrates}/100g)`;
+                        dropdown.add(option);
+                    });
+                });
+        });
+    });
+
+    function updateFoodName() {
+        var dropdown = document.getElementById('selected_product');
+        var selectedOption = dropdown.options[dropdown.selectedIndex];
+        var foodName = selectedOption.text.split(' ')[0];
+        document.getElementById('food_name').value = foodName;
+    }
 </script>
+
+
 {% endblock %}

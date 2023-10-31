@@ -15,18 +15,11 @@ services:
       timeout: 10s
       retries: 5
       start_period: 30s
-
-  mongo:
-    image: mongo
-    restart: always
-    ports:
-      - "27017:27017"
-    volumes:
-      - "${MONGO_DATA_PATH}:/data/db"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: toor
-  daibetes_app:
-    build: .
-    ports:
-      - "8090:8080"
+  app:
+      build: .
+      ports:
+        - "8011:8011"
+      depends_on:
+        - typesense
+      environment:
+        - FLASK_ENV=development  
