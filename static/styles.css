@@ -1,7 +1,8 @@
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
 body {
     font-family: 'Poppins', sans-serif;
-    background: #000000;
+    background: #2E2E2E;
 }
 
 p {
@@ -9,7 +10,7 @@ p {
     font-size: 1.1em;
     font-weight: 300;
     line-height: 1.7em;
-    color: rgb(0, 0, 0);
+    color: #6c6868c2;
 }
 
 a,
@@ -22,7 +23,7 @@ a:focus {
 
 .navbar {
     padding: 15px 10px;
-    background: #fff;
+    background: #3C3C3C;
     border: none;
     border-radius: 0;
     margin-bottom: 40px;
@@ -30,12 +31,12 @@ a:focus {
 }
 
 .logo {
-  display: inline-block;
-  vertical-align: top;
-  width: 150px;
-  height: 150px;
-  margin-right: 20px;
-  margin-top: 15px;  
+    display: inline-block;
+    vertical-align: top;
+    width: 150px;
+    height: 150px;
+    margin-right: 20px;
+    margin-top: 15px;
 }
 
 .navbar-btn {
@@ -51,21 +52,16 @@ a:focus {
     margin: 40px 0;
 }
 
-/* ---------------------------------------------------
-    SIDEBAR STYLE
------------------------------------------------------ */
-
 .wrapper {
     display: flex;
     width: 100%;
-    /* align-items: stretch; */
 }
 
 #sidebar {
     min-width: 250px;
     max-width: 250px;
-    background: #002c3b;
-    color: #fff;
+    background: #3C3C3C;
+    color: #E0E0E0;
     transition: all 0.3s;
 }
 
@@ -75,16 +71,16 @@ a:focus {
 
 #sidebar .sidebar-header {
     padding: 20px;
-    background: #002c3b;
+    background: #2B2B2B;
 }
 
 #sidebar ul.components {
     padding: 20px 0;
-    border-bottom: 1px solid #47748b;
+    border-bottom: 1px solid #4A4A4A;
 }
 
 #sidebar ul p {
-    color: #fff;
+    color: #E0E0E0;
     padding: 10px;
 }
 
@@ -95,14 +91,14 @@ a:focus {
 }
 
 #sidebar ul li a:hover {
-    color: #a9b3d7;
-    background: #7f9ba5;
+    color: #3C3C3C;
+    background: #E0E0E0;
 }
 
 #sidebar ul li.active>a,
 a[aria-expanded="true"] {
-    color: #fff;
-    background: #7f9ba5;
+    color: #3C3C3C;
+    background: #E0E0E0;
 }
 
 a[data-toggle="collapse"] {
@@ -120,7 +116,7 @@ a[data-toggle="collapse"] {
 ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
-    background: #002c3b;
+    background: #3C3C3C;
 }
 
 ul.CTAs {
@@ -136,19 +132,15 @@ ul.CTAs a {
 }
 
 a.download {
-    background: #fff;
-    color: #7386D5;
+    background: #E0E0E0;
+    color: #3C3C3C;
 }
 
 a.article,
 a.article:hover {
-    background: #000000 !important;
-    color: #7386D5 !important;
+    background: #2B2B2B !important;
+    color: #E0E0E0 !important;
 }
-
-/* ---------------------------------------------------
-    CONTENT STYLE
------------------------------------------------------ */
 
 #content {
     width: 25%;
@@ -156,32 +148,51 @@ a.article:hover {
     min-height: 100vh;
     transition: all 0.3s;
 }
+
 #page-content {
     padding: 20px;
 }
-/* ---------------------------------------------------
-    MEDIAQUERIES
------------------------------------------------------ */
 
 @media (max-width: 768px) {
     #sidebar {
         margin-left: -250px;
     }
+
     #sidebar.active {
         margin-left: 0;
     }
+
     #sidebarCollapse span {
         display: none;
     }
 }
 
 #flash-message {
-    max-width: 400px; 
-
+    max-width: 400px;
 }
 
 .side_class {
-    color: #a9b3d7;
+    color: #A0A0A0;
     text-decoration: none;
     background-color: transparent;
+}
+
+.btn-upload {
+    background-color: #008CBA;
+    /* Blue */
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btn-upload:hover {
+    background-color: #005f5f;
+    /* Darker blue on hover */
 }

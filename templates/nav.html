@@ -7,26 +7,18 @@
         </div>
         <ul class="list-unstyled components">
             <p>Automating diabetes surveillance</p>
-			<li>
-				<a href="/" class="side_class">Home</a>
-			</li>
             <li>
-	
-                <a href="#homeSubmenu" id="home" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle side_class">Tools</a>
-                <ul class="collapse list-unstyled" id="homeSubmenu">
-
-					<li>
-                        <a  href="/collect_data" class="side_class">Collect Data</a>
-                    </li>
-                    <li>
-                        <a href=" /show_data" class="side_class">Show Data</a>
-                    </li>
-                    <li>
-                        <a href="/model" class="side_class">Model</a>
-                    </li>
-                </ul>
+                <a href="/" class="side_class">Home</a>
             </li>
-            
+            <li>
+                <a href="/collect_data" class="side_class">Collect Data</a>
+            </li>
+            <li>
+                <a href="/show_data" class="side_class">Show Data</a>
+            </li>
+            <li>
+                <a href="/model" class="side_class">Model</a>
+            </li>
             <li>
                 <a href="#" class="side_class">Contact</a>
             </li>
@@ -36,11 +28,8 @@
 
     <!-- Page Content  -->
     <div id="content">
-		{% block content %}{% endblock %}
-            </div>
-        </nav>
-        
+        {% block content %}{% endblock %}
+    </div>
+    </nav>
 
-
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

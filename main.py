@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 from databases.off import OpenFoodFacts
-
+import pandas as pd
 from flask import Flask, render_template, request, flash, redirect, jsonify, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
@@ -9,6 +9,8 @@ from secure import SecureHeaders
 from utils.typesenseutils import createMongoClient, queryTypeSense, importToTypeSense
 from typesense import Client
 import pymongo
+import csv
+from dateutil import parser
 
 app = Flask(__name__)
 app.secret_key = "super secret key"
@@ -36,6 +38,16 @@ class FoodEntry(db.Model):
         self.carb = carb
         self.portion_size = portion_size
         self.timestamp = timestamp
+
+
+class FreeStyleData(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime)
+    sugar_level = db.Column(db.Float)
+
+    def __init__(self, timestamp, sugar_level):
+        self.timestamp = timestamp
+        self.sugar_level = sugar_level
 
 
 # Initiate the clients
@@ -95,10 +107,32 @@ def collect_data():
     return render_template("collect_data.html", current_timestamp=current_timestamp)
 
 
-@app.route("/show_data")
+@app.route("/upload_freestyle_data", methods=["GET", "POST"])
+def upload_freestyle_data():
+    if request.method == "POST" and "file" in request.files:
+        file = request.files["file"]
+        if file.filename == "":
+            flash("No file selected", "danger")
+            return redirect(request.url)
+        if file:
+            df = pd.read_csv(file)
+            for index, row in df.iterrows():
+                timestamp = parser.parse(row["time"])
+                sugar_level = float(row["value"])
+                entry = FreeStyleData(timestamp=timestamp, sugar_level=sugar_level)
+                db.session.add(entry)
+            db.session.commit()
+            flash("Data uploaded successfully", "success")
+    return render_template("collect_data.html")
+
+
+@app.route("/show_data", methods=["GET", "POST"])
 def show_data():
-    entries = FoodEntry.query.all()
-    return render_template("show_data.html", entries=entries)
+    food_entries = FoodEntry.query.all()
+    freestyle_entries = FreeStyleData.query.all()
+    return render_template(
+        "show_data.html", food_entries=food_entries, freestyle_entries=freestyle_entries
+    )
 
 
 @app.route("/delete/<int:entry_id>", methods=["POST"])

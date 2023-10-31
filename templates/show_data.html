@@ -1,42 +1,88 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="col-md-9 mt-4">
-  <!-- Database Entries -->
-  <h2>Database Entries</h2>
-  {% if entries %}
+    <!-- Database Entries -->
+    <h2>Database Entries</h2>
 
-  <table class="table table-striped">
-      <thead>
-          <tr>
-              <th>ID</th>
-              <th>Food Name</th>
-              <th>Portion Size</th>
-              <th>Carbs (100g)</th>
-              <th>Timestamp</th>
-              <th>Actions</th>
-          </tr>
-      </thead>
-      <tbody>
-          {% for entry in entries %}
-          <tr>
-              <td>{{ entry.id }}</td>
-              <td>{{ entry.food_name }}</td>
-              <td>{{ entry.portion_size }}</td>
-              <td>{{ entry.carb }}</td>
-              <td>{{ entry.timestamp }}</td>
-              <td>
-                  <form action="/delete/{{ entry.id }}" method="POST">
-                      <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                  </form>
-              </td>
-          </tr>
-          {% endfor %}
-      </tbody>
-  </table>
-  {% else %}
-  <p>No entries found.</p>
-{% endif %}
-</div>
-</div>
+    <ul class="nav nav-tabs" id="dataTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="food-tab" data-toggle="tab" href="#food" role="tab" aria-controls="food"
+                aria-selected="true">Food Data</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="freestyle-tab" data-toggle="tab" href="#freestyle" role="tab"
+                aria-controls="freestyle" aria-selected="false">FreeStyle Data</a>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="dataTabsContent">
+        <div class="tab-pane fade show active" id="food" role="tabpanel" aria-labelledby="food-tab">
+            <!-- Food Data Table -->
+            {% if food_entries %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Food Name</th>
+                        <th>Portion Size</th>
+                        <th>Carbs (100g)</th>
+                        <th>Timestamp</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in food_entries %}
+                    <tr>
+                        <td>{{ entry.id }}</td>
+                        <td>{{ entry.food_name }}</td>
+                        <td>{{ entry.portion_size }}</td>
+                        <td>{{ entry.carb }}</td>
+                        <td>{{ entry.timestamp }}</td>
+                        <td>
+                            <form action="/delete/{{ entry.id }}" method="POST">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No food entries found.</p>
+            {% endif %}
+        </div>
+
+        <div class="tab-pane fade" id="freestyle" role="tabpanel" aria-labelledby="freestyle-tab">
+            <!-- FreeStyle Data Table -->
+            {% if freestyle_entries %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Sugar Level (mg/dl)</th>
+                        <th>Timestamp</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in freestyle_entries %}
+                    <tr>
+                        <td>{{ entry.id }}</td>
+                        <td>{{ entry.sugar_level }}</td>
+                        <td>{{ entry.timestamp }}</td>
+                        <td>
+                            <form action="/delete_freestyle/{{ entry.id }}" method="POST">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No FreeStyle entries found.</p>
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}
